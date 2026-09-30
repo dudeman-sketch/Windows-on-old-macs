@@ -1,0 +1,67 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\colortbl ;\red0\green0\blue255;}
+{\*\generator Riched20 10.0.19041}\viewkind4\uc1 
+\pard\sl276\slmult1\b\f0\fs28\lang9 Installing windows 11 on pre 2012 macs from the start\par
+\b0\fs22 this was written and tested using a 2010 Macbook pro and a 2010 macbook. This guide starts from the beginning, assuming you just installed a new or wiped ssd or HDD.\par
+\par
+\b\fs28 Inital issues and repairs\par
+\fs24 Issue: \b0\fs22 kernel panic referencing GPU issues and/or no boot when cold (2008 - 2010 macbook pro).\par
+\b\fs24 Cause: \b0\fs22 C7771 on 2008-2009 Macbook Pros and C9560 on 2010 Macbook Pro often fails causing voltage issues causing the gpu to crash.\par
+\b\fs24 Solution:\b0\fs22  Replace C7771/C9560 with a larger 330uf tantalum capacitor. Alternatively use a program that stops macOS from using the dedicated GPU/Disables it.\par
+{{\field{\*\fldinst{HYPERLINK https://www.youtube.com/watch?v=hu7hPbRrRQ4 }}{\fldrslt{https://www.youtube.com/watch?v=hu7hPbRrRQ4\ul0\cf0}}}}\f0\fs22\par
+\b\fs24 Problem: \b0\fs22 physical damadge, bloated battery, failing HDD, overheating ect.\par
+\b\fs24 Solution: \b0\fs22 Repair and replace components as needed, housing, Battery, SSD, thermal paste.\par
+\par
+Our journy starts with a busted up 2010 15" macbook pro, purchaced from a local flea market for almost nothing. The screen glass was cracked, battery was swolen, HDD was failing, and housing was dented and scuffed. But with power applied it would slowly boot into macOS. I purchaced a used housing, battery and a new 256GB SSD to repair. As a side note, a 2011 macbook pro housing and screen will work for a 2010.\par
+Skipping ahead to after intalling mac os I was getting a random kernel panic referencing the gpu. The issue \par
+I found was that C7771 had failed and was causing a kernel panic when macOS tried to utilize the dedicated GPU. I ended up replacing the fauty capacitor with a larger 330uf tantalum capacitor.\par
+\b\fs28\par
+Installing macOS\par
+\fs22 Issue: \b0 Internet recovery for macOS High Sierra fails with "unable to contact recovery server" \par
+\b Cause: \b0 something broke in the internal SSL security verification or Security.framework causing HTTPS to not work.\par
+\b Solution: \b0 Use terminal to set an NVRAM variable redirecting the installer to connect via HTTP,\par
+Alternatively, create a macOS High Sierra bootable Flash drive or DVD and insntall from there.\par
+{{\field{\*\fldinst{HYPERLINK https://mrmacintosh.com/how-to-fix-the-recovery-server-could-not-be-contacted-error-high-sierra-recovery-is-still-online-but-broken\\\\ }}{\fldrslt{https://mrmacintosh.com/how-to-fix-the-recovery-server-could-not-be-contacted-error-high-sierra-recovery-is-still-online-but-broken\\\ul0\cf0}}}}\f0\fs22\par
+\par
+Install macOS by booting to internet recovery by holding  command+option+r keys on boot. intialize and partition the drive using disk utility, I went with APFS since it's supposed to be good for SSDs. click "install mac os" and follow the prompts, if the installer fails with "unable to contact recovery server" you will need to set an NVRAM variable redirecting the installer to connect with HTTP insteas of HTTPS. launch terminal with the menu on the top left and enter "nvram IASUCatalogURL="{{\field{\*\fldinst{HYPERLINK http://swscan.apple.com/content/catalogs/others/index-10.13-10.12-10.11-10.10-10.9-mountainlion-lion-snowleopard-leopard.merged-1.sucatalog }}{\fldrslt{http://swscan.apple.com/content/catalogs/others/index-10.13-10.12-10.11-10.10-10.9-mountainlion-lion-snowleopard-leopard.merged-1.sucatalog\ul0\cf0}}}}\f0\fs22 ""\par
+you can copy the url from the installer log so that you dont have to type the entire thing in manually.\par
+\par
+\b\fs28 Installing Windows\par
+\fs24 Issue:\b0  \fs22 Attempting to install windows on a GPT Partition scheme under UEFI causes a crash when gpu drivers are loaded. Audio may also be broken.\par
+\b\fs24 Cause\fs28 : \b0\fs22 Early MacBooks like the  2010 MacBook 7,1 have a rudimentary UEFI that breaks audio and causes NVidia GPU driver crashes on Windows 10/11 if Windows runs in EFI mode.\par
+\b\fs24 Solution: \b0\fs22 Use Bootcamp to install Windows 10 to a hybrid GPT/MBR partition so it runs under CSM/EFI hybrid mode. Alternatively, install windows to a second drive (replace DVD Drive with a SATA SSD)\par
+\b\fs24 Issue:\b0\fs22  after installing windows 10/11 under hybrid mode manually using DISM the mac will not boot to the bootcamp partition\par
+\b\fs24 Solution: \b0\fs22 Boot into windows installer and use command prompt to enter "Bootsect /nt60 C: /mbr" where C: is the bootcamp partition windows is installed on. Then enter bootrec /rebuildbcd, this will likely fail, dont worry about it. Then enter bcdboot "C:\\Windows /s C: /f BIOS" again, where C: is the bootcamp partition windows is installed on. Alternatively, install windows from a DVD.\par
+\b Issue: \b0 After installing bootcamp drivers windows windows BSODs shortly after boot.\par
+\b Cause: \b0 Older versions of macHALdriver.dll cause a BSOD in newer windows versions.\par
+\b Solution: \b0 Replace macHALdriver.dll with a newer version of bootcamp for a 2017 macbook pro\par
+\b\fs24 What you will need: \par
+\b0\fs22 Daemon tools (pick a version that works with your mac os version)\par
+Windows 7 ISO\par
+Windows 10/11 UEFI bootable flash drive \par
+A flash drive to store bootcamp drivers\par
+\b\fs24 Partitioning with bootcamp\par
+{\fs22{\field{\*\fldinst{HYPERLINK https://www.reddit.com/r/mac/comments/o01d9n/install_latest_windows_10_in_bootcamp_with }}{\fldrslt{https://www.reddit.com/r/mac/comments/o01d9n/install_latest_windows_10_in_bootcamp_with\ul0\cf0}}}}\f0\fs22\par
+\b0 Use bootcamp to download the windows support software and drivers to a seperate flash drive\par
+\fs20 NOTE: If installing to a second storage device you can optionally skip the bootcamp partitioning section and go straight to installing windows. You can partition the second drive from within windows if you prefer.\par
+\fs22 Install Daemon tools and mount your windows 7 ISO.\par
+Bootcamp will now allow you to partition the drive as a hybrid GPT/MBR disk. Pick your partition size and allow your mac to reboot. \par
+\b\fs24 Installing windows\par
+{\fs22{\field{\*\fldinst{HYPERLINK https://gist.github.com/pratyakshm/f19c106205f9327e9f1d538fb91fce65 }}{\fldrslt{https://gist.github.com/pratyakshm/f19c106205f9327e9f1d538fb91fce65\ul0\cf0}}}}\f0\fs22\par
+{{\field{\*\fldinst{HYPERLINK https://apple.stackexchange.com/questions/470869/bootcamp-not-appearing-as-bootable-disk-on-high-sierra }}{\fldrslt{https://apple.stackexchange.com/questions/470869/bootcamp-not-appearing-as-bootable-disk-on-high-sierra\ul0\cf0}}}}\b0\f0\fs22\par
+Insert your windows bootable flash drive and hold the option key while powering on to get to the boot picker. Select "efi boot" to boot from the windows installer. Once windows is booted press shift+f10 to Use "diskpart"  command to open DiskPart Type "list disk" to list disks on your device.\par
+select the disk you want to install to, in my case, for example, type  "select disk 0" to select disk 0.\par
+\b If installing to a second disk\b0  you can use "create partition primary" to make a new primary partition using the whole disk and then use "format fs=NTFS quick" to quick format the partition with NTFS. you can then use "assign letter=C" for example to mount the new partition.\par
+\b If installing to a bootcamp partition \b0 enter"list partition" to list all partitions in the current disk. \par
+Select the partition labled "bootcamp", for exaple "select part 4". With the bootcamp partition selected enter "format fs=NTFS quick" to format the bootcamp partition as NTFS. If a drive letter is not assigned use "assign letter=C" for exaple to assign your letter of choice.\par
+use dism /Get-ImageInfo /ImageFile:X:\\sources\\install.wim to see the windows aditions available on in our install file. you may need to change the drive letter to the one your flash drive is assosicated with. Note the index number of the edition you want to install.\par
+use "dism /Apply-Image /ImageFile:X:\\sources\\install.wim /Index:6 /ApplyDir:C:" where the index number and partition letter match the edition and partition you are trying to install to, to deploy the windows image. After installing enter "Bootsect /nt60 C: /mbr" where C: is the bootcamp partition windows is installed on. Then enter bootrec /rebuildbcd, this will likely fail, dont worry about it. Then enter bcdboot "C:\\Windows /s C: /f BIOS" again, where C: is the bootcamp partition windows is installed on.\par
+\b\fs24 Booting and settinng up windows\par
+\fs22 Issue: \b0 After installing bootcamp drivers windows windows BSODs shortly after boot.\par
+\b Cause: \b0 Older versions of macHALdriver.dll cause a BSOD in newer windows versions.\par
+\b Solution: \b0 Replace macHALdriver.dll with a newer version of bootcamp for a 2017 macbook pro\par
+If all went well you should now be able to boot into your windows install by holding option and selecting it.We arent quite out of the woods yet\par
+\b\par
+\b0  Now for the drivers,\par
+}
+ 
