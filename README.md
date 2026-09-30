@@ -24,9 +24,7 @@ I found was that C7771 had failed and was causing a kernel panic when macOS trie
 
 **Solution:** Use terminal to set an NVRAM variable redirecting the installer to connect via HTTP, Alternatively, create a macOS High Sierra bootable Flash drive or DVD and insntall from there. https://mrmacintosh.com/how-to-fix-the-recovery-server-could-not-be-contacted-error-high-sierrarecovery-is-still-online-but-broken\ 
 
-Install macOS by booting to internet recovery by holding  command+option+r keys on boot. intialize and partition the drive using disk utility, I went with APFS since it's supposed to be good for SSDs. click "install mac os" and follow the prompts, if the installer fails with "unable to contact recovery server" you will need to set an NVRAM variable redirecting the installer to connect with HTTP insteas of HTTPS. launch terminal with the menu on the top left and enter "nvram 
-
-IASUCatalogURL="http://swscan.apple.com/content/catalogs/others/index-10.13-10.12-10.11-10.1010.9-mountainlion-lion-snowleopard-leopard.merged-1.sucatalog"" 
+Install macOS by booting to internet recovery by holding  command+option+r keys on boot. intialize and partition the drive using disk utility, I went with APFS since it's supposed to be good for SSDs. click "install mac os" and follow the prompts, if the installer fails with "unable to contact recovery server" you will need to set an NVRAM variable redirecting the installer to connect with HTTP insteas of HTTPS. launch terminal with the menu on the top left and enter "nvram IASUCatalogURL="http://swscan.apple.com/content/catalogs/others/index-10.13-10.12-10.11-10.1010.9-mountainlion-lion-snowleopard-leopard.merged-1.sucatalog"" 
 
 you can copy the url from the installer log so that you dont have to type the entire thing in manually. 
 
